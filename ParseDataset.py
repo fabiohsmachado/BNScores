@@ -4,12 +4,25 @@ class Dataset:
   self.variablesQuantity = 0;
   self.variablesCardinality = [];
 
-def ParserFile(filename):
- 
+def ParseFile(filename):
+ dataset = Dataset();
+ with open(filename, "r") as datasetFile:
+  dataset.variablesQuantity = int(datasetFile.readline());
+  dataset.variablesCardinality = datasetFile.readline().strip('\n');
+  datasetFile.readline();
+  for line in datasetFile:
+   dataset.data.append(line);
+  return dataset;
 
 def main():
+ dataset = ParseFile("files/nursery_bin.data");
+ print dataset.variablesQuantity;
+ print dataset.variablesCardinality;
+ print dataset.data;
+
+    # TODO:
     # OK: Create dataset class
-    # Parse file and create a dataset object
+    # OK: Parse file and create a dataset object
     # Cross validate the dataset into subdatasets
     # Creat subdirectory structure
     # Save the subdataset to files
