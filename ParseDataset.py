@@ -13,6 +13,7 @@ def ParseFile(filename):
  dataset = Dataset();
  name = os.path.basename(filename);
  dataset.name = os.path.splitext(name)[0];
+
  with open(filename, "r") as datasetFile:
   dataset.variablesQuantity = int(datasetFile.readline());
   dataset.variablesCardinality = datasetFile.readline().strip('\n');
@@ -40,8 +41,10 @@ def KFoldCrossValidation(dataset, K, randomise = True):
 
  for k in xrange(K):
   training.data = [line for i, line in enumerate(data) if math.floor(i/dataPerFold) != k]
+  training.name = dataset.name + "." + str(k) + ".training";
   validation.data = [line for i, line in enumerate(data) if math.floor(i/dataPerFold) == k]
-  yield k, training, validation;
+  validation.name = dataset.name + "." + str(k) + ".validation";
+  yield training, validation;
 
 def CreateDatasetDirectory(datasetParentDirectory, dataset):
  if not os.path.exists(datasetParentDirectory):
@@ -52,21 +55,28 @@ def CreateDatasetDirectory(datasetParentDirectory, dataset):
     os.makedirs(pathToDataset)
 
  return pathToDataset;
-    
+
+def WriteDatasetToFile(path, dataset):
+ with open(path + "/" + dataset.name + ".data", "w") as datasetFile:
+  datasetFile.write(str(dataset.variablesQuantity) + "\n");
+  datasetFile.write(dataset.variablesCardinality + "\n");
+  datasetFile.write(str(len(dataset.data)) + "\n");
+  for dataLine in dataset.data:
+   datasetFile.write(dataLine);
+
 def main():
  dataset = ParseFile("files/nursery_bin.data");
- CreateDatasetDirectory("parsedFiles", dataset);
- for k, training, validation in KFoldCrossValidation(dataset, 10):
-  print "Dataset Name: " + dataset.name;
-  print "Training Size: " + str(len(training.data));
-  print "Validation Size: " + str(len(validation.data));
+ datasetPath = CreateDatasetDirectory("parsedFiles", dataset);
+ for training, validation in KFoldCrossValidation(dataset, 10):
+  WriteDatasetToFile(datasetPath, training);
+  WriteDatasetToFile(datasetPath, validation);
 
     # TODO:
     # OK: Create dataset class
     # OK: Parse file and create a dataset object
     # OK: Cross validate the dataset into subdatasets
-    # Creat subdirectory structure
-    # Save the subdataset to files
+    # OK: Creat subdirectory structure
+    # OK: Save the subdataset to files
     # Run scoring in each training dataset
     # Run gobnilp foreach score file
     # Run twilp for each score file
