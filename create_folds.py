@@ -16,9 +16,12 @@ def parse(datasetFile, folds):
  dataset = Dataset();
  dataset.ParseFile(datasetFile);
  datasetPath = CreateDatasetDirectory("parsedFiles", dataset);
+ validationFiles = [];
+ trainingFiles = [];
  for training, validation in dataset.KFoldGenerator(folds):
-  validationFileName = validation.WriteToFile(datasetPath);
-  trainingFileName = training.WriteToFile(datasetPath);
+  validationFiles.append(validation.WriteToFile(datasetPath));
+  trainingFiles.append(training.WriteToFile(datasetPath));
+ return validationFiles, trainingFiles;
 
 def error():
  print "Usage:", sys.argv[0], "data_filename", "number_of_folds";
