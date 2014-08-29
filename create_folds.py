@@ -1,6 +1,7 @@
 #!/bin/python
 # Read a dataset file (or all dataset files in a given folder) and create all the Kfolds for the Cross Validation.
-import os
+import sys, os
+from glob import glob
 from Dataset import Dataset
 
 def CreateDatasetDirectory(datasetParentDirectory, dataset):
@@ -20,20 +21,16 @@ def parse(datasetFile, folds):
   trainingFileName = training.WriteToFile(datasetPath);
 
 def error():
- print "Usage:", sys.argv[0], "data_filename OR data_directory", "number_of_folds";
+ print "Usage:", sys.argv[0], "data_filename", "number_of_folds";
  exit(0);
 
-if __name__ == "__main__":
- import sys
- if len(sys.argv) < 2:
+def main():
+ if len(sys.argv) < 3:
   error();
 
- if(os.path.isdir(sys.argv[1])):
-  datasetFiles = os.listdir(sys.argv[1]);
-  datasetFiles.sort();
-  for datasetFile in datasetFiles:
-   parse(sys.argv[1] + "/" + datasetFile, int(sys.argv[2]));
- elif(os.path.isfile(sys.argv[1])):
-   parse(sys.argv[1], int(sys.argv[2]));
- else:
-  error();
+ for datasetFile in glob(sys.argv[1]):
+  if os.path.isfile(datasetFile):
+   parse(datasetFile, int(sys.argv[2]));
+
+if __name__ == "__main__":
+ main();

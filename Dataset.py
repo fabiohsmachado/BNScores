@@ -1,5 +1,4 @@
-# Implements Dataset class
-# 
+# Implements Dataset class 
 import math
 import os
 from random import shuffle
