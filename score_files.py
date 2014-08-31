@@ -13,18 +13,19 @@ def ScoreDatasetFile(pathToScorer, pathToDataset, alpha, palim):
  print "Finished scoring the dataset", pathToDataset;
  return scoreFileName;
 
-def error():
+def Error():
  print "Usage:", sys.argv[0], "data_files, alpha, parents_limit";
  exit(0);
 
-def main():
+def Main(argList):
  pathToScorer = "/opt/bnet/learning/gobnilp-1.4.1-cplex/scoring";
- if len(sys.argv) < 4:
-  error();
 
- for datasetFile in sys.argv[1:-2]:
+ for datasetFile in argList[:-2]:
   if os.path.isfile(datasetFile):
-   ScoreDatasetFile(pathToScorer, datasetFile, int(sys.argv[-2]), int(sys.argv[-1]));
+   ScoreDatasetFile(pathToScorer, datasetFile, int(argList[-2]), int(argList[-1]));
 
 if __name__ == "__main__":
- main();
+ if len(sys.argv) < 4:
+  Error();
+
+ Main(sys.argv[1:]);

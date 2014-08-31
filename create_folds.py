@@ -15,7 +15,7 @@ def Parse(datasetFile, folds):
  print "Parsing dataset:", datasetFile, "into", folds, "folds."
  dataset = Dataset();
  dataset.ParseFile(datasetFile);
- datasetPath = CreateDatasetDirectory("parsedFiles", dataset);
+ datasetPath = CreateDatasetDirectory("datasetFolds", dataset);
  validationFiles = [];
  trainingFiles = [];
  for training, validation in dataset.KFoldGenerator(folds):
@@ -24,17 +24,17 @@ def Parse(datasetFile, folds):
  print "Finished parsing the", datasetFile, "datasetFile."
  return validationFiles, trainingFiles;
 
+def Main(argList):
+ for datasetFile in argList[:-1]:
+  if os.path.isfile(datasetFile):
+   Parse(datasetFile, int(argList[-1]));
+
 def Error():
  print "Usage:", sys.argv[0], "data_filename", "number_of_folds";
  exit(0);
 
-def Main():
+if __name__ == "__main__":
  if len(sys.argv) < 3:
   Error();
 
- for datasetFile in sys.argv[1:-1]:
-  if os.path.isfile(datasetFile):
-   Parse(datasetFile, int(sys.argv[-1]));
-
-if __name__ == "__main__":
- Main();
+ Main(sys.argv[1:]);
