@@ -15,10 +15,9 @@ class Dataset:
   self.name = os.path.splitext(os.path.basename(filename))[0];
   with open(filename, "r") as datasetFile:
    self.variablesQuantity = int(datasetFile.readline());
-   self.variablesCardinality = datasetFile.readline().strip('\n');
+   self.variablesCardinality = [int(number) for number in datasetFile.readline().strip().split()];
    datasetFile.readline();
-   for line in datasetFile:
-    self.data.append(line);
+   self.data = [[int(number) for number in line.strip().split()] for line in datasetFile];
 
  def CloneWithoutData(self):
   cloneDataset = Dataset();
@@ -48,8 +47,8 @@ class Dataset:
   datasetFileName = path + "/" + self.name + ".data";
   with open(datasetFileName, "w") as datasetFile:
    datasetFile.write(str(self.variablesQuantity) + "\n");
-   datasetFile.write(self.variablesCardinality + "\n");
+   datasetFile.write(" ".join(map(str, self.variablesCardinality)) + "\n");
    datasetFile.write(str(len(self.data)) + "\n");
-   for dataLine in self.data:
-    datasetFile.write(dataLine);
+   datasetFile.write("\n".join(" ".join(map(str, dataLine)) for dataLine in self.data));
+   datasetFile.write("\n");
   return datasetFileName;

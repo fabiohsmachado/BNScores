@@ -22,18 +22,17 @@ def LearnWithTwilp(pathToTwilp, pathToScore, treewidth):
  return resultYFilename, resultZFilename, timeFilename;
 
 def Error():
- print "Usage:", sys.argv[0], "data_files, treewidth.";
+ print "Usage:", sys.argv[0], "data_files treewidth";
  exit(0);
 
-def Main(argList):
+def LearnTwilp(fileList, treewidth):
  pathToTwilp = "/opt/bnet/learning/twilp/twilp.py";
-
- for datasetFile in argList[:-1]:
-  if os.path.isfile(datasetFile):
-   LearnWithTwilp(pathToTwilp, datasetFile, int(argList[-1]));
+ results =  [LearnWithTwilp(pathToTwilp, datasetFile, treewidth) for datasetFile in fileList if os.path.isfile(datasetFile)];
+ YResultFiles, ZresultFiles, timeFiles = [[row[i] for row in results] for i in range(len(results[0]))];
+ return YResultFiles, ZresultFiles, timeFiles;
 
 if __name__ == "__main__":
- if len(sys.argv) < 4:
+ try:
+  LearnTwilp(sys.argv[1:], sys.argv[-1]);
+ except:
   Error();
-
- Main(sys.argv[1:]);

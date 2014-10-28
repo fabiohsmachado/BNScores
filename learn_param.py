@@ -4,7 +4,7 @@
 from Variable import Variable
 from Factor import Factor
 
-def learn_CPT_from_file(filename, varCard, parentSets, ess=1.0):
+def learn_CPT_from_file(data, varCard, parentSets, ess=1.0):
  # varCard: cardinalities of variables
  # parentSets: dictionary of parents of each variable
  # ess: BDe prior equivalent sample size
@@ -21,13 +21,10 @@ def learn_CPT_from_file(filename, varCard, parentSets, ess=1.0):
    prior /= varCard[j] 
   CPT[i] = Factor([ Variables[i] ] + [ Variables[j] for j in parentSets[i] ], defaultValue=prior, zeroValue=0)
  # now read count data from file
- infile = open(filename)
- for line in infile:
-  line = line.strip()
-  line = line.split()
+ for line in data:
   if len(line) == N:
    for i in range(N):
-    datum = [int(line[i])] + [ int(line[j]) for j in parentSets[i]]
+    datum = [line[i]] + [line[j] for j in parentSets[i]]
     CPT[i].incrementValue(datum) # add one
  for i in range(N):
   CPT[i].normalize() 
