@@ -28,4 +28,5 @@ if __name__ == "__main__":
  if len(sys.argv) < 4:
   Error();
 
+ print "List of parents:", GetListOfParents(sys.argv[2]);
  print "Likelihood:", Main(sys.argv[1], sys.argv[2], float(sys.argv[3]));

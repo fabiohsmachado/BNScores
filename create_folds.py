@@ -5,27 +5,26 @@ from Dataset import Dataset
 
 def CreateDatasetDirectory(datasetParentDirectory, dataset):
  if not os.path.exists(datasetParentDirectory):
-    os.makedirs(datasetParentDirectory);
+  os.makedirs(datasetParentDirectory);
  pathToDataset = datasetParentDirectory + "/" + dataset.name;
  if not os.path.exists(pathToDataset):
-    os.makedirs(pathToDataset)
+  os.makedirs(pathToDataset)
+ dataset.pathToFiles = datasetParentDirectory;
  return pathToDataset;
 
-def Parse(datasetFile, folds):
- print "Parsing dataset:", datasetFile, "into", folds, "folds.";
- dataset = Dataset();
- dataset.ParseFile(datasetFile);
+def Parse(dataset, folds):
+ print "Parsing dataset:", dataset.name, "into", folds, "folds.";
  datasetPath = CreateDatasetDirectory("datasetFolds", dataset);
  validationFiles = [];
  trainingFiles = [];
  for training, validation in dataset.KFoldGenerator(folds):
   validationFiles.append(validation.WriteToFile(datasetPath));
   trainingFiles.append(training.WriteToFile(datasetPath));
- print "Finished parsing the", datasetFile, "datasetFile.";
+ print "Finished parsing.";
  return validationFiles, trainingFiles;
 
 def CreateFolds(fileList, folds):
- results =  [Parse(datasetFile, folds) for datasetFile in fileList if os.path.isfile(datasetFile)];
+ results =  [Parse(Dataset(datasetFile), folds) for datasetFile in fileList if os.path.isfile(datasetFile)];
  validationFiles, trainingFiles =  [[row[i] for row in results] for i in range(len(results))]
  return validationFiles, trainingFiles;
 

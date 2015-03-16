@@ -5,7 +5,7 @@ import os
 from subprocess import call
 
 def LearnWithTwilp(pathToTwilp, pathToScore, treewidth):
- print "Learning the network structures from file", pathToScore, "using Twilp."
+ print "Learning the network structures from file", pathToScore, "using Twilp and treewidth", treewidth;
  resultYFilename = os.path.splitext(pathToScore)[0] + ".twilp."+str(treewidth)+".y_result.gml";
  resultZFilename = os.path.splitext(pathToScore)[0] + ".twilp."+str(treewidth)+".z_result.gml";
  timeFilename = os.path.splitext(pathToScore)[0] + ".twilp."+str(treewidth)+".time";
@@ -18,21 +18,34 @@ def LearnWithTwilp(pathToTwilp, pathToScore, treewidth):
  call(["mv", twilpBaseName+".result", timeFilename], shell=False);
  call(["mv", twilpBaseName+"_y.gml", resultYFilename], shell=False);
  call(["mv", twilpBaseName+"_z.gml", resultZFilename], shell=False);
- print "Finished learning the network structures from file", pathToScore, "using Gobnilp."
+ print "Finished learning.";
  return resultYFilename, resultZFilename, timeFilename;
+
+def LearnTwilpVariable(fileList, variablesQuantity):
+ pathToTwilp = "/opt/bnet/learning/twilp/twilp.py";
+
+ treewidths = [4];
+ treewidth = 10;
+ while(treewidth <= variablesQuantity / 2):
+  treewidths.append(treewidth);
+  treewidth += 5;
+
+ results = [[LearnWithTwilp(pathToTwilp, datasetFile, tw) for datasetFile in fileList if os.path.isfile(datasetFile)] for tw in treewidths];
+ YresultFiles, ZresultFiles, timeFiles = [[[t[s][f] for t in results] for s in xrange(len(results[0]))] for f in xrange(len(results[0][0]))];
+ return treewidths, YresultFiles, ZresultFiles, timeFiles;
+ 
+def LearnTwilp(fileList, treewidth):
+ pathToTwilp = "/opt/bnet/learning/twilp/twilp.py";
+ results =  [LearnWithTwilp(pathToTwilp, datasetFile, treewidth) for datasetFile in fileList if os.path.isfile(datasetFile)];
+ YresultFiles, ZresultFiles, timeFiles = [[row[i] for row in results] for i in range(len(results[0]))];
+ return YresultFiles, ZresultFiles, timeFiles;
 
 def Error():
  print "Usage:", sys.argv[0], "data_files treewidth";
  exit(0);
 
-def LearnTwilp(fileList, treewidth):
- pathToTwilp = "/opt/bnet/learning/twilp/twilp.py";
- results =  [LearnWithTwilp(pathToTwilp, datasetFile, treewidth) for datasetFile in fileList if os.path.isfile(datasetFile)];
- YResultFiles, ZresultFiles, timeFiles = [[row[i] for row in results] for i in range(len(results[0]))];
- return YResultFiles, ZresultFiles, timeFiles;
-
 if __name__ == "__main__":
  try:
-  LearnTwilp(sys.argv[1:], sys.argv[-1]);
+  LearnTwilpVariable(sys.argv[1:], int(sys.argv[-1]));
  except:
   Error();

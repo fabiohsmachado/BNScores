@@ -33,4 +33,6 @@ if __name__ == '__main__':
  # C <-
  vc = [ 2, 2, 2 ]
  ps = [ [1,2], [2], [] ]
- print 'Likelihood:', compute_likelihood(sys.argv[1],vc,ps,1.0)
+ with open(sys.argv[1], "r") as dataFile:
+  data = [[int(number) for number in line.strip().split()] for line in dataFile];
+  print 'Likelihood:', compute_likelihood(data,vc,ps,1.0)

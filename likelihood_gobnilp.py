@@ -11,8 +11,9 @@ def GetGraphFromGobnilpFile(gobnilpResult):
  matrix = "";
  with open(gobnilpResult, "r") as gobnilpResultFile:
   for line in gobnilpResultFile:
-   matrix += line.strip('\n') + "; "
+   matrix += line.strip('\n') + "; ";
  matrix = matrix[:-2];
+ print matrix;
  return networkx.from_numpy_matrix(numpy.matrix(matrix), create_using=networkx.DiGraph());
 
 def GetListOfParents(gobnilpResult):
@@ -22,11 +23,12 @@ def GetListOfParents(gobnilpResult):
 def Main(datasetFile, matrixFile, ess):
  dataset = Dataset();
  dataset.ParseFile(datasetFile);
+ print GetListOfParents(matrixFile);
  return compute_likelihood(dataset.data, dataset.variablesCardinality, GetListOfParents(matrixFile), ess);
 
 def Error():
  print "Usage:", sys.argv[0], "data_filename", "matrix_file", "ess";
- exit(0); 
+ exit(0);
 
 if __name__ == "__main__":
  if len(sys.argv) < 4:

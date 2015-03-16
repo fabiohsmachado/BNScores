@@ -10,7 +10,7 @@ def ScoreDatasetFile(pathToScorer, pathToDataset, alpha, palim):
  scoreCommand = [pathToScorer, pathToDataset, str(alpha), str(palim)];
  with open(scoreFileName, "w") as scoreFile:
   call(scoreCommand, stdout = scoreFile, shell = False);
- print "Finished scoring the dataset", pathToDataset;
+ print "Finished scoring.";
  return scoreFileName;
 
 def Error():

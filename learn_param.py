@@ -16,7 +16,7 @@ def learn_CPT_from_file(data, varCard, parentSets, ess=1.0):
   Variables[i] = Variable('X'+str(i),c)
  CPT = N*[ None ]
  for i in range(N):
-  prior = ess/varCard[i]
+  prior = float(ess)/varCard[i]
   for j in parentSets[i]:
    prior /= varCard[j] 
   CPT[i] = Factor([ Variables[i] ] + [ Variables[j] for j in parentSets[i] ], defaultValue=prior, zeroValue=0)
@@ -40,6 +40,8 @@ if __name__ == '__main__':
  # C <-
  vc = [ 2, 2, 2 ]
  ps = [ [1,2], [2], [] ]
- var,cpt = learn_CPT_from_file(sys.argv[1],vc,ps,1.0)
+ with open(sys.argv[1], "r") as dataFile:
+  data = [[int(number) for number in line.strip().split()] for line in dataFile];
+  var,cpt = learn_CPT_from_file(data,vc,ps,1.0)
  for p in cpt:
   p.printOut()

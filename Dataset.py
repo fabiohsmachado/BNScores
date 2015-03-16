@@ -5,19 +5,23 @@ from random import shuffle
 
 class Dataset:
  """ Class Dataset """
- def __init__(self):
+ def __init__(self, fileName = None):
   self.data = [];
   self.variablesQuantity = 0;
   self.variablesCardinality = "";
   self.name = "";
-
- def ParseFile(self, filename):
-  self.name = os.path.splitext(os.path.basename(filename))[0];
-  with open(filename, "r") as datasetFile:
+  self.pathToFiles = "";
+  if(fileName is not None):
+   self.ParseFile(fileName)
+  
+ def ParseFile(self, fileName):
+  self.name = os.path.splitext(os.path.basename(fileName))[0];
+  with open(fileName, "r") as datasetFile:
    self.variablesQuantity = int(datasetFile.readline());
    self.variablesCardinality = [int(number) for number in datasetFile.readline().strip().split()];
    datasetFile.readline();
    self.data = [[int(number) for number in line.strip().split()] for line in datasetFile];
+   self.data2 = [line for line in self.data if sum(line) != 0]
 
  def CloneWithoutData(self):
   cloneDataset = Dataset();

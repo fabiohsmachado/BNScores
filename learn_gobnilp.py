@@ -19,7 +19,7 @@ def LearnWithGobnilp(pathToGobnilp, pathToScore):
  gobnilpCommand = [pathToGobnilp, "-f=jkl", pathToScore];
  call(gobnilpCommand, shell = False, stdout=open(os.devnull, "w"));
  call(["rm", "-f", "gobnilp.set"], shell=False);
- print "Finished learning the network structures from file", pathToScore, "using Gobnilp."
+ print "Finished learning."
  return matrixFilename, resultFilename, timeFilename;
 
 def Error():
