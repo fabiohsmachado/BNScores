@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 # Read a dataset file (or all dataset files in a given folder) and create all the Kfolds for the Cross Validation.
 import sys, os
 from Dataset import Dataset
@@ -41,6 +41,6 @@ def Error():
 
 if __name__ == "__main__":
  # try:
-  ScoreDatasets(sys.argv[1:-1], int(sys.argv[-3]), int(sys.argv[-2]), int(sys.argv[-1]));
+  ScoreDatasets(sys.argv[1:-3], int(sys.argv[-3]), int(sys.argv[-2]), int(sys.argv[-1]));
  # except:
  #  Error();

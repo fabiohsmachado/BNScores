@@ -13,7 +13,6 @@ def GetGraphFromGobnilpFile(gobnilpResult):
   for line in gobnilpResultFile:
    matrix += line.strip('\n') + "; ";
  matrix = matrix[:-2];
- print matrix;
  return networkx.from_numpy_matrix(numpy.matrix(matrix), create_using=networkx.DiGraph());
 
 def GetListOfParents(gobnilpResult):

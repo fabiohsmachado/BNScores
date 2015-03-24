@@ -24,7 +24,7 @@ def LearnWithTwilp(pathToTwilp, pathToScore, treewidth):
 def LearnTwilpVariable(fileList, variablesQuantity):
  pathToTwilp = "/opt/bnet/learning/twilp/twilp.py";
 
- treewidths = [4];
+ treewidths = [3, 4, 5];
  treewidth = 10;
  while(treewidth <= variablesQuantity / 2):
   treewidths.append(treewidth);
